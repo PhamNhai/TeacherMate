@@ -1,0 +1,92 @@
+.page {
+  max-width: 920px;
+  margin: 24px auto;
+  padding: 0 16px 24px;
+}
+
+.header {
+  margin-bottom: 12px;
+}
+
+.badge {
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.form {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.studentRow {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.studentRow input {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.questionCard {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.questionCard h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+}
+
+.option,
+.optionActive {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.optionActive {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.submitButton {
+  margin-top: 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.error {
+  margin-top: 12px;
+  color: #b91c1c;
+  font-weight: 600;
+}
