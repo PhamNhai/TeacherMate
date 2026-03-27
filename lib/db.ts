@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 import type { Exam, ExamQuestion, StoredResult } from "./types";
 
 type ExamRow = {
@@ -33,11 +33,8 @@ const derivedPostgresUrl =
   process.env.DATABASE_URL ||
   process.env.DATABASE_URL_UNPOOLED;
 
-if (!process.env.POSTGRES_URL && derivedPostgresUrl) {
-  process.env.POSTGRES_URL = derivedPostgresUrl;
-}
-
 const dbConfigured = Boolean(derivedPostgresUrl);
+const sql = dbConfigured ? neon(derivedPostgresUrl as string) : null;
 
 const memoryStore = {
   examSeq: 0,
@@ -51,7 +48,7 @@ export function isDatabaseConfigured(): boolean {
 }
 
 async function ensureTables(): Promise<void> {
-  if (!dbConfigured) {
+  if (!dbConfigured || !sql) {
     return;
   }
 
@@ -89,7 +86,7 @@ async function ensureTables(): Promise<void> {
 export async function insertExam(
   exam: Omit<Exam, "id" | "createdAt">
 ): Promise<{ id: number }> {
-  if (!dbConfigured) {
+  if (!dbConfigured || !sql) {
     memoryStore.examSeq += 1;
     const id = memoryStore.examSeq;
     memoryStore.exams.set(id, {
@@ -102,7 +99,7 @@ export async function insertExam(
 
   await ensureTables();
   const questionsJson = JSON.stringify(exam.questions);
-  const { rows } = await sql<Pick<ExamRow, "id">>`
+  const rows = await sql`
     INSERT INTO exams (
       title, grade, subject, topic, difficulty, bloom_level, duration_minutes,
       requirements, question_count, questions_json
@@ -112,10 +109,10 @@ export async function insertExam(
       ${exam.bloomLevel}, ${exam.durationMinutes}, ${exam.requirements},
       ${exam.questionCount}, ${questionsJson}::jsonb
     )
-    RETURNING id;
+    RETURNING id
   `;
 
-  return { id: rows[0]!.id };
+  return { id: Number((rows[0] as { id: number }).id) };
 }
 
 export async function getExamById(id: number): Promise<Exam | null> {
@@ -123,19 +120,19 @@ export async function getExamById(id: number): Promise<Exam | null> {
     return null;
   }
 
-  if (!dbConfigured) {
+  if (!dbConfigured || !sql) {
     return memoryStore.exams.get(id) ?? null;
   }
 
   await ensureTables();
-  const { rows } = await sql<ExamRow>`
+  const rows = (await sql`
     SELECT
       id, title, grade, subject, topic, difficulty, bloom_level, duration_minutes,
       requirements, question_count, questions_json, created_at
     FROM exams
     WHERE id = ${id}
-    LIMIT 1;
-  `;
+    LIMIT 1
+  `) as unknown as ExamRow[];
 
   if (!rows.length) {
     return null;
@@ -167,7 +164,7 @@ export async function saveResult(input: {
 }): Promise<{ id: number }> {
   const percentage = Number(((input.score / Math.max(1, input.total)) * 100).toFixed(2));
 
-  if (!dbConfigured) {
+  if (!dbConfigured || !sql) {
     memoryStore.resultSeq += 1;
     const id = memoryStore.resultSeq;
     memoryStore.results.set(id, {
@@ -184,16 +181,16 @@ export async function saveResult(input: {
   }
 
   await ensureTables();
-  const { rows } = await sql<Pick<ResultRow, "id">>`
+  const rows = await sql`
     INSERT INTO results (exam_id, student_name, score, total, percentage, ai_comment)
     VALUES (
       ${input.examId}, ${input.studentName}, ${input.score}, ${input.total},
       ${percentage}, ${input.aiComment}
     )
-    RETURNING id;
+    RETURNING id
   `;
 
-  return { id: rows[0]!.id };
+  return { id: Number((rows[0] as { id: number }).id) };
 }
 
 export async function getResultById(id: number): Promise<StoredResult | null> {
@@ -201,17 +198,17 @@ export async function getResultById(id: number): Promise<StoredResult | null> {
     return null;
   }
 
-  if (!dbConfigured) {
+  if (!dbConfigured || !sql) {
     return memoryStore.results.get(id) ?? null;
   }
 
   await ensureTables();
-  const { rows } = await sql<ResultRow>`
+  const rows = (await sql`
     SELECT id, exam_id, student_name, score, total, percentage, ai_comment, created_at
     FROM results
     WHERE id = ${id}
-    LIMIT 1;
-  `;
+    LIMIT 1
+  `) as unknown as ResultRow[];
 
   if (!rows.length) {
     return null;
