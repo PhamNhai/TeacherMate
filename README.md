@@ -25,10 +25,12 @@ Mo: `http://localhost:3000`
 GEMINI_API_KEY=
 GEMINI_MODEL=gemini-1.5-flash
 POSTGRES_URL=
+AI_NO_KEY_PROVIDER=pollinations
 ```
 
 - Khong co `POSTGRES_URL`: app dung memory store de demo.
-- Khong co `GEMINI_API_KEY`: app fallback de mau + nhan xet mau.
+- Khong co `GEMINI_API_KEY`: app tu dong goi AI no-key (Pollinations).
+- Neu AI no-key loi hoac JSON sai format: app moi fallback de mau.
 
 ## Luong su dung
 

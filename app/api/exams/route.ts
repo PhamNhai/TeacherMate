@@ -12,11 +12,35 @@ type GeminiRawQuestion = {
   explanation?: unknown;
 };
 
-function toAnswerIndex(answer: string): number {
-  if (["A", "B", "C", "D"].includes(answer)) {
-    return answer.charCodeAt(0) - "A".charCodeAt(0);
+function normalizeOptionTexts(options: unknown): string[] {
+  if (!Array.isArray(options)) {
+    return [];
+  }
+  const normalized = options
+    .map((value) => String(value ?? "").trim())
+    .filter((value) => value.length > 0);
+  return normalized.slice(0, 4);
+}
+
+function optionLabelToIndex(answer: string): number {
+  const normalized = answer.trim().toUpperCase();
+  if (["A", "B", "C", "D"].includes(normalized)) {
+    return normalized.charCodeAt(0) - "A".charCodeAt(0);
+  }
+  if (["1", "2", "3", "4"].includes(normalized)) {
+    return Number(normalized) - 1;
   }
   return -1;
+}
+
+function toAnswerIndex(answerRaw: unknown, options: string[]): number {
+  const answer = String(answerRaw ?? "").trim();
+  const fromLabel = optionLabelToIndex(answer);
+  if (fromLabel >= 0 && fromLabel < options.length) {
+    return fromLabel;
+  }
+  const byText = options.findIndex((opt) => opt.toLowerCase() === answer.toLowerCase());
+  return byText;
 }
 
 function normalizeQuestions(raw: unknown, expectedCount: number): ExamQuestion[] {
@@ -30,15 +54,15 @@ function normalizeQuestions(raw: unknown, expectedCount: number): ExamQuestion[]
       if (typeof q.question !== "string") {
         return null;
       }
-      if (!Array.isArray(q.options) || q.options.length !== 4) {
+      const options = normalizeOptionTexts(q.options);
+      if (options.length < 2) {
         return null;
       }
-      const options = q.options.filter((o): o is string => typeof o === "string");
-      if (options.length !== 4) {
-        return null;
+      while (options.length < 4) {
+        options.push(`Lua chon ${String.fromCharCode(65 + options.length)}`);
       }
-      const answer = String(q.answer ?? "").trim().toUpperCase();
-      const answerIndex = toAnswerIndex(answer);
+
+      const answerIndex = toAnswerIndex(q.answer, options);
       if (answerIndex < 0 || answerIndex > 3) {
         return null;
       }
