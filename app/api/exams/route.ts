@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { buildGenerationPrompt, generateExamWithGemini } from "@/lib/gemini";
+import { buildGenerationPrompt, generateExamWithGemini, hasGeminiKey } from "@/lib/gemini";
 import { insertExam, isDatabaseConfigured } from "@/lib/db";
 import { createExamPayloadSchema } from "@/lib/validators";
 import type { ExamQuestion } from "@/lib/types";
@@ -98,17 +98,31 @@ export async function POST(request: Request) {
     const payload = parsed.data;
     let questions: ExamQuestion[];
 
+    let generationError: unknown = null;
     try {
       const prompt = buildGenerationPrompt(payload);
       const aiData = await generateExamWithGemini(prompt);
       questions = normalizeQuestions(aiData, payload.questionCount);
-    } catch {
+    } catch (error) {
+      generationError = error;
       questions = buildMockExam({
         subject: payload.subject,
         topic: payload.topic,
         questionCount: payload.questionCount,
         difficulty: payload.difficulty
       });
+    }
+
+    if (hasGeminiKey() && generationError) {
+      const message =
+        generationError instanceof Error ? generationError.message : "Unknown Gemini error";
+      return NextResponse.json(
+        {
+          error: "Tao de bang Gemini that bai.",
+          details: message
+        },
+        { status: 502 }
+      );
     }
 
     const inserted = await insertExam({

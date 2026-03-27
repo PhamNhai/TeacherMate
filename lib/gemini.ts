@@ -101,6 +101,10 @@ export async function generateExamWithGemini(prompt: string): Promise<unknown> {
   return JSON.parse(cleaned);
 }
 
+export function hasGeminiKey(): boolean {
+  return Boolean(process.env.GEMINI_API_KEY);
+}
+
 export async function gradeExam(input: {
   studentName: string;
   subject: string;

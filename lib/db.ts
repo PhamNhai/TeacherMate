@@ -27,7 +27,17 @@ type ResultRow = {
   created_at: string;
 };
 
-const dbConfigured = Boolean(process.env.POSTGRES_URL);
+const derivedPostgresUrl =
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_PRISMA_URL ||
+  process.env.DATABASE_URL ||
+  process.env.DATABASE_URL_UNPOOLED;
+
+if (!process.env.POSTGRES_URL && derivedPostgresUrl) {
+  process.env.POSTGRES_URL = derivedPostgresUrl;
+}
+
+const dbConfigured = Boolean(derivedPostgresUrl);
 
 const memoryStore = {
   examSeq: 0,
