@@ -1,11 +1,11 @@
 :root {
   color-scheme: light;
-  --bg: #f5f7fb;
+  --bg: #fdfcff;
   --card: #ffffff;
   --text: #1f2937;
   --muted: #6b7280;
-  --primary: #0f62fe;
-  --primary-dark: #0043ce;
+  --primary: #a855f7;
+  --primary-dark: #7e22ce;
   --border: #e5e7eb;
   --success: #0f766e;
   --danger: #b42318;
@@ -18,7 +18,7 @@
 body {
   margin: 0;
   font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: var(--bg);
+  background: radial-gradient(circle at top left, #fdf2f8 0%, var(--bg) 40%, #eef2ff 100%);
   color: var(--text);
 }
 
@@ -37,6 +37,14 @@ a {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
+}
+
+.hero-card {
+  background: linear-gradient(140deg, #fdf2f8, #f5f3ff 45%, #ecfeff);
+  border: 1px solid #f5d0fe;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 12px 28px #f5d0fe33;
 }
 
 .eyebrow {
@@ -63,25 +71,32 @@ a {
 
 .btn {
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 10px 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
   color: white;
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background: linear-gradient(135deg, #db2777, #7c3aed);
 }
 
 .btn-secondary {
   background: white;
-  border: 1px solid var(--border);
-  color: var(--text);
+  border: 1px solid #ddd6fe;
+  color: #6d28d9;
+}
+
+.btn-soft {
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  color: #7e22ce;
 }
 
 .input,

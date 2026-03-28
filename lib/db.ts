@@ -1,5 +1,5 @@
 import { neon } from "@neondatabase/serverless";
-import type { Exam, ExamQuestion, StoredResult } from "./types";
+import type { Exam, ExamQuestion, ExamResultSummary, StoredResult } from "./types";
 
 type ExamRow = {
   id: number;
@@ -225,4 +225,35 @@ export async function getResultById(id: number): Promise<StoredResult | null> {
     aiComment: row.ai_comment,
     createdAt: row.created_at
   };
+}
+
+export async function listResultsByExamId(examId: number): Promise<ExamResultSummary[]> {
+  if (!Number.isFinite(examId) || examId <= 0) {
+    return [];
+  }
+
+  if (!dbConfigured || !sql) {
+    return Array.from(memoryStore.results.values())
+      .filter((item) => item.examId === examId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  }
+
+  await ensureTables();
+  const rows = (await sql`
+    SELECT id, exam_id, student_name, score, total, percentage, ai_comment, created_at
+    FROM results
+    WHERE exam_id = ${examId}
+    ORDER BY created_at DESC
+  `) as unknown as ResultRow[];
+
+  return rows.map((row) => ({
+    id: row.id,
+    examId: row.exam_id,
+    studentName: row.student_name,
+    score: Number(row.score),
+    total: row.total,
+    percentage: Number(row.percentage),
+    aiComment: row.ai_comment,
+    createdAt: row.created_at
+  }));
 }

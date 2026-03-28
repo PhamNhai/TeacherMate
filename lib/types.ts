@@ -55,3 +55,14 @@ export type StoredResult = {
   createdAt: string;
 };
 
+export type ExamResultSummary = {
+  id: number;
+  examId: number;
+  studentName: string;
+  score: number;
+  total: number;
+  percentage: number;
+  aiComment: string;
+  createdAt: string;
+};
+

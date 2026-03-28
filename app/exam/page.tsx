@@ -19,8 +19,9 @@ export default async function ExamEntryPage({
   return (
     <main className={styles.page}>
       <section className={styles.card}>
+        <p className={styles.badge}>Student mode</p>
         <h1>Vao phong thi</h1>
-        <p className={styles.subtitle}>Nhap ID de de bat dau lam bai.</p>
+        <p className={styles.subtitle}>Man nay chi danh cho hoc sinh lam bai.</p>
 
         {createdId ? (
           <p className={styles.notice}>
@@ -36,7 +37,7 @@ export default async function ExamEntryPage({
 
         <div className={styles.links}>
           {createdId ? <Link href={`/exam/${createdId}`}>Lam de vua tao</Link> : null}
-          <Link href="/create">Tao de moi</Link>
+          <Link href="/create">Sang man tao de</Link>
         </div>
       </section>
     </main>

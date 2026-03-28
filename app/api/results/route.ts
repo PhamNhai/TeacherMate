@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
 
 import { gradeExam } from "@/lib/gemini";
-import { getExamById, saveResult } from "@/lib/db";
+import { getExamById, listResultsByExamId, saveResult } from "@/lib/db";
 import { scoreAnswers } from "@/lib/mock";
 import { submitResultInputSchema } from "@/lib/validators";
 import { getResultById } from "@/lib/db";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
+  const examId = Number(url.searchParams.get("examId"));
+  if (Number.isFinite(examId) && examId > 0) {
+    const results = await listResultsByExamId(examId);
+    return NextResponse.json({ ok: true, results });
+  }
+
   const resultId = Number(url.searchParams.get("resultId"));
 
   if (!Number.isFinite(resultId) || resultId <= 0) {

@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import styles from "./create.module.css";
 import {
   BLOOMS_LEVELS,
@@ -36,10 +36,10 @@ const initial: CreatePayload = {
 };
 
 export default function CreateExamPage() {
-  const router = useRouter();
   const [form, setForm] = useState<CreatePayload>(initial);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [createdExamId, setCreatedExamId] = useState<number | null>(null);
 
   const canSubmit = useMemo(() => {
     return form.topic.trim().length > 0 && form.examTitle.trim().length > 0;
@@ -52,6 +52,7 @@ export default function CreateExamPage() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
+    setCreatedExamId(null);
     if (!canSubmit) return;
 
     setIsLoading(true);
@@ -62,25 +63,34 @@ export default function CreateExamPage() {
         body: JSON.stringify(form),
       });
 
-      const data = (await response.json()) as { id?: string; error?: string };
+      const data = (await response.json()) as { id?: number; error?: string; details?: string };
       if (!response.ok || !data.id) {
-        setError(data.error ?? "Không thể tạo đề. Vui lòng thử lại.");
+        setError(data.details ? `${data.error} - ${data.details}` : data.error ?? "Khong the tao de.");
         return;
       }
-      router.push(`/exam/${data.id}`);
+      setCreatedExamId(data.id);
     } catch {
-      setError("Lỗi mạng. Vui lòng thử lại.");
+      setError("Loi mang. Vui long thu lai.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const onReset = () => {
+    setForm(initial);
+    setError("");
+    setCreatedExamId(null);
+  };
+
   return (
     <main className={styles.page}>
-      <section className={styles.card}>
-        <h1>Tạo đề trắc nghiệm bằng AI</h1>
-        <p className={styles.subtitle}>Chọn thông số. Bấm tạo đề. Chia sẻ link cho học sinh làm bài.</p>
+      <section className={styles.hero}>
+        <p className={styles.tag}>Teacher mode</p>
+        <h1>Tao de trac nghiem</h1>
+        <p>Man nay chi de tao de. Khong dung de lam bai.</p>
+      </section>
 
+      <section className={styles.card}>
         <form onSubmit={onSubmit} className={styles.form}>
           <div className={styles.grid}>
             <label>
@@ -204,10 +214,30 @@ export default function CreateExamPage() {
           {error ? <p className={styles.error}>{error}</p> : null}
 
           <button type="submit" disabled={isLoading || !canSubmit}>
-            {isLoading ? "Đang tạo đề..." : "Tạo đề"}
+            {isLoading ? "Dang tao de..." : "Tao de"}
           </button>
         </form>
       </section>
+
+      {createdExamId ? (
+        <section className={styles.successCard}>
+          <h2>Tao de thanh cong 🎉</h2>
+          <p>
+            ID de: <strong>{createdExamId}</strong>
+          </p>
+          <div className={styles.actions}>
+            <Link href={`/exam/${createdExamId}`} className={styles.primaryLink}>
+              Mo man lam bai
+            </Link>
+            <Link href={`/exam/${createdExamId}/results`} className={styles.secondaryLink}>
+              Xem ket qua tung hoc sinh
+            </Link>
+            <button type="button" onClick={onReset} className={styles.resetBtn}>
+              Tao de moi
+            </button>
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }
