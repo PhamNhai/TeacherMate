@@ -92,6 +92,7 @@ export default function ResultPage() {
 
         <footer className={styles.actions}>
           <Link href={`/exam/${params.id}`}>Lam lai</Link>
+          <Link href={`/exam/${params.id}/results`}>Xem bang ket qua lop</Link>
           <Link href="/create">Tao de moi</Link>
         </footer>
       </section>

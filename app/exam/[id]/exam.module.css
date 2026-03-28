@@ -6,22 +6,38 @@
 
 .header {
   margin-bottom: 12px;
+  background: linear-gradient(140deg, #e0f2fe, #eef2ff 50%, #ecfeff);
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  padding: 14px;
 }
 
 .badge {
   width: fit-content;
   padding: 4px 10px;
   border-radius: 999px;
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #ffffffcc;
+  color: #0c4a6e;
+  border: 1px solid #bae6fd;
   font-size: 12px;
   margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.teacherHint {
+  margin: 8px 0 0;
+  color: #1e3a8a;
+}
+
+.teacherHint a {
+  color: #7c3aed;
+  font-weight: 700;
 }
 
 .form {
   background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
   padding: 16px;
 }
 
@@ -31,14 +47,20 @@
   margin-bottom: 12px;
 }
 
+.studentRow label {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
 .studentRow input {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
   padding: 10px;
+  color: #0f172a;
 }
 
 .questionCard {
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #e0f2fe;
   padding-top: 14px;
   margin-top: 14px;
 }
@@ -46,6 +68,7 @@
 .questionCard h2 {
   margin: 0 0 10px;
   font-size: 17px;
+  color: #0f172a;
 }
 
 .options {
@@ -55,27 +78,28 @@
 
 .option,
 .optionActive {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
   padding: 10px;
   display: flex;
   gap: 8px;
   align-items: center;
   cursor: pointer;
+  background: #fff;
 }
 
 .optionActive {
-  border-color: #2563eb;
+  border-color: #38bdf8;
   background: #eff6ff;
 }
 
 .submitButton {
   margin-top: 16px;
   border: 0;
-  border-radius: 8px;
-  background: #2563eb;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
   padding: 10px 14px;
   cursor: pointer;
 }
@@ -88,5 +112,5 @@
 .error {
   margin-top: 12px;
   color: #b91c1c;
-  font-weight: 600;
+  font-weight: 700;
 }

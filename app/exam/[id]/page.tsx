@@ -113,6 +113,10 @@ export default function ExamPlayPage() {
         <p>
           Lop {exam.grade} · {exam.subject} · {exam.topic}
         </p>
+        <p className={styles.teacherHint}>
+          Giao vien xem tong hop ket qua tai{" "}
+          <a href={`/exam/${exam.id}/results`}>man ket qua tung hoc sinh</a>.
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>

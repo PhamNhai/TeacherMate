@@ -1,0 +1,107 @@
+.page {
+  max-width: 980px;
+  margin: 24px auto;
+  padding: 0 16px 28px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #f1e3f7;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.header {
+  background: linear-gradient(140deg, #fdf2f8, #eff6ff 45%, #ecfeff);
+  border: 1px solid #fbcfe8;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.badge {
+  margin: 0 0 8px;
+  display: inline-block;
+  background: #ffffffcc;
+  color: #be185d;
+  border: 1px solid #f9a8d4;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #831843;
+}
+
+.header p {
+  margin: 8px 0 0;
+  color: #6b2149;
+}
+
+.list {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  border: 1px solid #f3e8ff;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.item h2 {
+  margin: 0;
+  color: #4c1d95;
+  font-size: 18px;
+}
+
+.score {
+  font-weight: 800;
+  color: #b45309;
+}
+
+.comment {
+  margin: 10px 0 0;
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 10px;
+  padding: 10px;
+  color: #4c1d95;
+  line-height: 1.5;
+}
+
+.time {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.empty {
+  margin-top: 12px;
+  color: #6b7280;
+}
+
+.error {
+  margin-top: 12px;
+  color: #be123c;
+  font-weight: 700;
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

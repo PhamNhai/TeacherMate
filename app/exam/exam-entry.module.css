@@ -5,23 +5,36 @@
 }
 
 .card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
+  background: linear-gradient(140deg, #ecfeff, #eff6ff 48%, #f0f9ff);
+  border: 1px solid #bae6fd;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.badge {
+  margin: 0 0 8px;
+  display: inline-block;
+  background: #ffffffcc;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .subtitle {
   margin-top: 4px;
-  color: #4b5563;
+  color: #0f4c81;
 }
 
 .notice {
   margin-top: 12px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 8px;
+  background: #ffffffd9;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
   padding: 10px;
+  color: #0c4a6e;
 }
 
 .form {
@@ -31,19 +44,20 @@
 }
 
 .form input {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
   padding: 10px;
+  color: #0f172a;
 }
 
 .form button {
   width: fit-content;
   border: 0;
-  border-radius: 8px;
-  background: #2563eb;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
   color: #fff;
   padding: 10px 12px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
 }
 

@@ -18,6 +18,16 @@ function stripCodeFence(input: string): string {
   return input.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
 }
 
+function extractJsonArrayText(raw: string): string {
+  const text = stripCodeFence(raw);
+  const start = text.indexOf("[");
+  const end = text.lastIndexOf("]");
+  if (start >= 0 && end > start) {
+    return text.slice(start, end + 1);
+  }
+  return text;
+}
+
 function extractTextFromGeminiResponse(data: unknown): string {
   const root = data as {
     candidates?: Array<{ content?: { parts?: Array<{ text?: unknown }> } }>;
@@ -31,7 +41,13 @@ function extractTextFromGeminiResponse(data: unknown): string {
 async function callGemini(payload: GeminiPayload): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("Missing GEMINI_API_KEY.");
+    const prompt = payload.contents?.[0]?.parts?.[0]?.text ?? "";
+    const noKeyUrl = `https://text.pollinations.ai/${encodeURIComponent(prompt)}`;
+    const noKeyRes = await fetch(noKeyUrl, { cache: "no-store" });
+    if (!noKeyRes.ok) {
+      throw new Error(`No-key AI failed: ${noKeyRes.status}`);
+    }
+    return (await noKeyRes.text()).trim();
   }
 
   const response = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
@@ -81,8 +97,12 @@ export async function generateExamWithGemini(prompt: string): Promise<unknown> {
       responseMimeType: "application/json"
     }
   });
-  const cleaned = stripCodeFence(text);
+  const cleaned = extractJsonArrayText(text);
   return JSON.parse(cleaned);
+}
+
+export function hasGeminiKey(): boolean {
+  return Boolean(process.env.GEMINI_API_KEY);
 }
 
 export async function gradeExam(input: {
@@ -95,10 +115,6 @@ export async function gradeExam(input: {
   wrongQuestions: string[];
 }): Promise<string> {
   const fallback = `Ban ${input.studentName} dung ${input.correctCount}/${input.totalQuestions} cau (${input.score} diem). Hay on lai cac cau sai va lam them bai tap cung dang.`;
-
-  if (!process.env.GEMINI_API_KEY) {
-    return fallback;
-  }
 
   try {
     const prompt = [

@@ -7,7 +7,7 @@ Ung dung tao de trac nghiem bang AI, hoc sinh lam bai online, he thong cham diem
 - Next.js (App Router) + TypeScript
 - API Routes
 - Gemini API (`gemini-1.5-flash`)
-- Vercel Postgres (tuy chon)
+- Neon Serverless Postgres (tuy chon)
 
 ## Chay local
 
@@ -24,11 +24,14 @@ Mo: `http://localhost:3000`
 ```env
 GEMINI_API_KEY=
 GEMINI_MODEL=gemini-1.5-flash
-POSTGRES_URL=
+DATABASE_URL=
+DATABASE_URL_UNPOOLED=
+AI_NO_KEY_PROVIDER=pollinations
 ```
 
-- Khong co `POSTGRES_URL`: app dung memory store de demo.
-- Khong co `GEMINI_API_KEY`: app fallback de mau + nhan xet mau.
+- Khong co `DATABASE_URL`/`DATABASE_URL_UNPOOLED`: app dung memory store de demo.
+- Khong co `GEMINI_API_KEY`: app tu dong goi AI no-key (Pollinations).
+- Neu AI no-key loi hoac JSON sai format: app moi fallback de mau.
 
 ## Luong su dung
 
@@ -45,5 +48,5 @@ POSTGRES_URL=
 3. Add env vars:
    - `GEMINI_API_KEY`
    - `GEMINI_MODEL` (optional)
-   - `POSTGRES_URL` (neu dung Vercel Postgres)
+   - `DATABASE_URL` (hoac `DATABASE_URL_UNPOOLED`)
 4. Deploy
